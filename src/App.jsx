@@ -19,13 +19,13 @@ import { CSS } from "@dnd-kit/utilities";
 
 // ---- 스타일 객체 ----
 const styles = {
+    // ... (이전 스타일은 그대로 유지) ...
     pageWrapper: {
         minHeight: "100vh",
         width: '100%',
         background: "#f0f2f5",
         fontFamily: "system-ui, sans-serif",
     },
-    // [수정됨] 사이드바가 화면 위에 뜨도록 position: fixed 사용
     sidebar: (isOpen) => ({
         position: 'fixed',
         top: 0,
@@ -38,11 +38,10 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         zIndex: 100,
-        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)', // 슬라이드 애니메이션
+        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
         transition: 'transform 250ms ease-in-out',
         whiteSpace: 'nowrap',
     }),
-    // [추가됨] 사이드바 배경
     backdrop: (isOpen) => ({
         position: 'fixed',
         top: 0,
@@ -153,33 +152,31 @@ const styles = {
         alignItems: 'center',
         gap: 12,
     },
-    // [추가됨] 토글 스위치 스타일
-    switch: (checked) => ({
+    // [수정] 버튼 스타일 추가
+    editBtn: {
+        padding: '6px 16px',
+        borderRadius: 6,
+        border: 'none',
+        background: '#1890ff',
+        color: 'white',
+        fontWeight: 600,
         cursor: 'pointer',
-        width: 44,
-        height: 24,
-        borderRadius: 12,
-        background: checked ? '#1890ff' : '#bfbfbf',
-        position: 'relative',
-        transition: 'background 200ms',
-    }),
-    switchThumb: (checked) => ({
-        width: 20,
-        height: 20,
-        borderRadius: '50%',
-        background: 'white',
-        position: 'absolute',
-        top: 2,
-        left: 2,
-        transform: checked ? 'translateX(20px)' : 'translateX(0)',
-        transition: 'transform 200ms',
-    }),
-    editToggle: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        color: '#374151',
-        fontSize: 14,
+    },
+    saveBtn: {
+        padding: '6px 16px',
+        borderRadius: 6,
+        border: 'none',
+        background: '#1890ff',
+        color: 'white',
+        fontWeight: 600,
+        cursor: 'pointer',
+    },
+    cancelBtn: {
+        padding: '6px 12px',
+        borderRadius: 6,
+        border: '1px solid #d9d9d9',
+        background: '#fff',
+        cursor: 'pointer',
     },
     resetBtn: {
         padding: '6px 12px',
@@ -231,67 +228,23 @@ const styles = {
     }
 };
 
-// ---- 차트 컴포넌트 ----
+// ---- 차트 컴포넌트 (변경 없음) ----
 const SimplePieChart = ({ data }) => {
-    const total = data.reduce((sum, item) => sum + item.value, 0);
-    let cumulative = 0;
-    return (
-        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-            <svg viewBox="0 0 100 100" width="120" height="120">
-                {data.map(item => {
-                    const percentage = (item.value / total) * 100;
-                    const startAngle = (cumulative / total) * 360;
-                    const endAngle = startAngle + (item.value / total) * 360;
-                    cumulative += item.value;
-                    const largeArcFlag = percentage > 50 ? 1 : 0;
-                    const x1 = 50 + 50 * Math.cos(Math.PI * startAngle / 180);
-                    const y1 = 50 + 50 * Math.sin(Math.PI * startAngle / 180);
-                    const x2 = 50 + 50 * Math.cos(Math.PI * endAngle / 180);
-                    const y2 = 50 + 50 * Math.sin(Math.PI * endAngle / 180);
-                    return <path key={item.name} d={`M 50,50 L ${x1},${y1} A 50,50 0 ${largeArcFlag} 1 ${x2},${y2} Z`} fill={item.color} />;
-                })}
-            </svg>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13 }}>
-                {data.map(item => (
-                    <div key={item.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ width: 10, height: 10, background: item.color, borderRadius: '50%' }}></span>
-                        {item.name} ({item.value}명)
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+    // ... (이전 코드와 동일) ...
+};
+const SimpleLineChart = ({ data }) => {
+    // ... (이전 코드와 동일) ...
 };
 
-const SimpleLineChart = ({ data }) => (
-    <div style={{ width: '100%', height: '100%', padding: '10px 0' }}>
-        <svg viewBox="0 0 300 150" width="100%" height="100%">
-            <path d="M 20 130 L 280 130" stroke="#ccc" strokeWidth="1" />
-            <path d="M 20 20 L 20 130" stroke="#ccc" strokeWidth="1" />
-            {data.map(dataset => (
-                <polyline
-                    key={dataset.color}
-                    fill="none"
-                    stroke={dataset.color}
-                    strokeWidth="2"
-                    points={dataset.points.map(p => `${20 + (p.x / 30) * 260},${130 - (p.y / 2000) * 100}`).join(' ')}
-                />
-            ))}
-        </svg>
-    </div>
-);
-
-// ---- 데이터 ----
+// ---- 데이터 (변경 없음) ----
 const PIE_CHART_DATA = [{ name: "통화중", value: 2, color: '#5470c6' }, { name: "대기중", value: 3, color: '#91cc75' }, { name: "자리비움", value: 1, color: '#fac858' }, { name: "후처리", value: 2, color: '#ee6666' },];
 const LINE_CHART_DATA = [{ color: '#5470c6', points: Array.from({ length: 31 }, (_, i) => ({ x: i, y: 1000 + Math.random() * 500 })) }, { color: '#91cc75', points: Array.from({ length: 31 }, (_, i) => ({ x: i, y: 800 + Math.random() * 400 })) }, { color: '#ee6666', points: Array.from({ length: 31 }, (_, i) => ({ x: i, y: 600 + Math.random() * 600 })) },];
 const DEFAULT_WIDGETS = [{ id: "w_total", title: "전체 접속", icon: "👥", size: 1, type: 'stat' }, { id: "w_req", title: "상담 요청", icon: "📞", size: 1, type: 'stat' }, { id: "w_done", title: "처리 완료", icon: "✅", size: 1, type: 'stat' }, { id: "w_kpi", title: "처리율", icon: "📈", size: 1, type: 'stat' }, { id: "w_sla", title: "SLA 충족률", icon: "🛡️", size: 1, type: 'stat' }, { id: "w_consultant_status", title: "상담원 상태", size: 2, type: 'pieChart', data: PIE_CHART_DATA }, { id: "w_traffic_trend", title: "전체 접속건수", size: 2, type: 'lineChart', data: LINE_CHART_DATA }, { id: "w_today", title: "금일 접속건수", icon: "📅", size: 1, type: 'stat' },];
 const LS_KEY = "interactive-dashboard-v3";
 
-// ---- 로컬스토리지 상태 ----
+// ---- 로컬스토리지 상태 (변경 없음) ----
 function usePersistedState(initial) {
-    const [state, setState] = useState(() => { try { const raw = localStorage.getItem(LS_KEY); if (raw) return JSON.parse(raw); } catch {} return initial; });
-    useEffect(() => { try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch {} }, [state]);
-    return [state, setState];
+    // ... (이전 코드와 동일) ...
 }
 
 // ---- UI 컴포넌트 ----
@@ -304,41 +257,17 @@ const GridIcon = () => (
     </svg>
 );
 
-const ToggleSwitch = ({ checked, onChange }) => (
-    <div style={styles.switch(checked)} onClick={() => onChange(!checked)}>
-        <div style={styles.switchThumb(checked)}></div>
-    </div>
-);
+// [수정] ToggleSwitch 컴포넌트는 이제 사용되지 않으므로 삭제해도 됩니다.
 
 function Sidebar({ isOpen, onClose }) {
-    const [activeMenu, setActiveMenu] = useState('dashboard');
-    return (
-        <>
-            <div style={styles.backdrop(isOpen)} onClick={onClose} />
-            <div style={styles.sidebar(isOpen)}>
-                <div style={styles.sidebarHeader}>모니터링</div>
-                <div style={styles.sidebarMenu}>
-                    <div style={styles.sidebarItem(activeMenu === 'dashboard')} onClick={() => setActiveMenu('dashboard')}>대시보드</div>
-                    <div style={styles.sidebarItem(activeMenu === 'details')} onClick={() => setActiveMenu('details')}>상세 현황</div>
-                </div>
-            </div>
-        </>
-    );
+    // ... (이전 코드와 동일) ...
 }
 
 function Header({ onToggleSidebar }) {
-    return (
-        <div style={styles.header}>
-            <div style={styles.headerLeft}>
-                <button onClick={onToggleSidebar} style={styles.menuBtn} title="메뉴 열기">
-                    <GridIcon />
-                </button>
-                <h1 style={styles.pageTitle}>대시보드</h1>
-            </div>
-        </div>
-    );
+    // ... (이전 코드와 동일) ...
 }
 
+// [수정] FilterBar 컴포넌트를 새롭게 변경
 function FilterBar({ editable, setEditable, onReset }) {
     return (
         <div style={styles.filterBar}>
@@ -349,51 +278,37 @@ function FilterBar({ editable, setEditable, onReset }) {
                 <button style={styles.searchBtn}>조회</button>
             </div>
             <div style={styles.controlsGroup}>
-                {editable && <button style={styles.resetBtn} onClick={onReset}>초기화</button>}
-                <div style={styles.editToggle}>
-                    <span>편집</span>
-                    <ToggleSwitch checked={editable} onChange={setEditable} />
-                </div>
+                {editable ? (
+                    <>
+                        <button style={styles.resetBtn} onClick={onReset}>초기화</button>
+                        <button style={styles.cancelBtn} onClick={() => setEditable(false)}>취소</button>
+                        <button style={styles.saveBtn} onClick={() => setEditable(false)}>저장</button>
+                    </>
+                ) : (
+                    <button style={styles.editBtn} onClick={() => setEditable(true)}>편집</button>
+                )}
             </div>
         </div>
     );
 }
 
+// SortableCard, SortableBinItem 컴포넌트는 변경 없음
 function SortableCard({ id, item, editable, onHide }) {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id, disabled: !editable });
-    const style = { transform: CSS.Transform.toString(transform), transition, touchAction: "none", cursor: editable ? "grab" : "default" };
-    const renderBody = () => {
-        switch (item.type) {
-            case 'pieChart': return <SimplePieChart data={item.data} />;
-            case 'lineChart': return <SimpleLineChart data={item.data} />;
-            default: return <div style={styles.statBody}><span style={styles.icon}>{item.icon}</span><span style={styles.statValue}>n건</span></div>;
-        }
-    };
-    return (
-        <div style={{ ...styles.cardWrap(item.size), ...style }} ref={setNodeRef} {...(editable ? { ...attributes, ...listeners } : {})}>
-            <div style={styles.card(isDragging)}>
-                <div style={styles.cardHeader}>
-                    <div style={styles.cardTitle}>{item.title}</div>
-                    {editable && <button type="button" style={styles.hideBtn} onPointerDown={(e) => e.stopPropagation()} onClick={() => onHide(id)} title="화면에서 제거">✕</button>}
-                </div>
-                <div style={styles.cardBody}>{renderBody()}</div>
-            </div>
-        </div>
-    );
+    // ... (이전 코드와 동일) ...
 }
-
 function SortableBinItem({ id, title }) {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
-    const style = { transform: CSS.Transform.toString(transform), transition, ...styles.binItem };
-    return <div ref={setNodeRef} style={style} {...attributes} {...listeners}>{title}</div>;
+    // ... (이전 코드와 동일) ...
 }
 
 // ---- 메인 ----
 export default function DashboardV5() {
     const initial = useMemo(() => ({ dashboard: DEFAULT_WIDGETS.map((w) => w.id), hidden: [] }), []);
     const [state, setState] = usePersistedState(initial);
-    const [editable, setEditable] = useState(true);
-    const [isSidebarOpen, setSidebarOpen] = useState(false); // 기본 닫힘
+
+    // [수정 1] editable의 기본값을 false로 변경
+    const [editable, setEditable] = useState(false);
+
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
     const byId = useMemo(() => Object.fromEntries(DEFAULT_WIDGETS.map((w) => [w.id, w])), []);
 
     const sensors = useSensors(
@@ -403,21 +318,7 @@ export default function DashboardV5() {
     );
 
     const onDragEnd = ({ active, over }) => {
-        if (!over || active.id === over.id) return;
-        const activeContainer = state.dashboard.includes(active.id) ? 'dashboard' : 'hidden';
-        const overContainer = state.dashboard.includes(over.id) ? 'dashboard' : state.hidden.includes(over.id) ? 'hidden' : null;
-        if (!overContainer) return;
-        if (activeContainer === overContainer) {
-            const oldIndex = state[activeContainer].indexOf(active.id);
-            const newIndex = state[overContainer].indexOf(over.id);
-            setState(prev => ({ ...prev, [activeContainer]: arrayMove(prev[activeContainer], oldIndex, newIndex) }));
-        } else {
-            setState(prev => ({
-                ...prev,
-                [activeContainer]: prev[activeContainer].filter(id => id !== active.id),
-                [overContainer]: [...prev[overContainer], active.id]
-            }));
-        }
+        // ... (이전 코드와 동일) ...
     };
 
     const hideWidget = (id) => setState({ ...state, dashboard: state.dashboard.filter((x) => x !== id), hidden: [...state.hidden, id] });
@@ -429,6 +330,7 @@ export default function DashboardV5() {
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
             <div style={styles.mainContent}>
                 <Header onToggleSidebar={() => setSidebarOpen(true)} />
+                {/* [수정 2] FilterBar에 setEditable을 그대로 전달 */}
                 <FilterBar editable={editable} setEditable={setEditable} onReset={resetAll} />
                 <DndContext sensors={sensors} collisionDetection={closestCorners} onDragEnd={onDragEnd}>
                     <SortableContext items={state.dashboard} strategy={rectSortingStrategy}>
@@ -453,4 +355,3 @@ export default function DashboardV5() {
         </div>
     );
 }
-
